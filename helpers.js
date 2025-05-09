@@ -5,32 +5,28 @@ var fs = require('fs');
 var helpers = {};
 
 helpers.isValidUrl = (url) => {
-	return validUrl.isUri(url) && url.startsWith('https://www.marktplaats');
+  return validUrl.isUri(url) && url.startsWith('https://www.marktplaats');
 }
 
 helpers.downloadImages = (images, title) => {
 
-	var dir = process.env.USERPROFILE + '\\Desktop\\' + title;
+  for (var i = 0; i < images.length; i++) {
 
-	if (!fs.existsSync(dir)) {
-		fs.mkdirSync(dir);
-		console.log('Created folder: ', dir);
-	}
+    var options = {
+      url: images[i],
+      dest: title + ' | ' + i + '.jpg'
+    }
 
-	for (var i = 0; i < images.length; i++) {
-
-		var options = {
-			url: images[i],
-			dest: dir + '\\' + i + '.jpg'
-		}
-
-		download.image(options)
-			.then(({ filename, image }) => {
-				console.log('File saved to', filename)
-			}).catch((err) => {
-				throw err
-			})
-	}
+    download.image(options)
+      .then(({
+        filename,
+        image
+      }) => {
+        console.log('File saved to', filename)
+      }).catch((err) => {
+        throw err
+      })
+  }
 
 };
 
